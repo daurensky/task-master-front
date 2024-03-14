@@ -1,35 +1,21 @@
-import type {MetaFunction} from '@remix-run/cloudflare'
+import {type MetaFunction} from '@remix-run/cloudflare'
 
 export const meta: MetaFunction = () => {
   return [
-    {title: 'New Remix App'},
+    {title: 'Task Master'},
     {
       name: 'description',
-      content: 'Welcome to Remix! Using Vite and Cloudflare!',
+      content: 'Удобный менеджер задач! Создайте свою kanban доску.',
     },
   ]
 }
 
-export default function Index() {
+const AppIndex = () => {
   return (
-    <div style={{fontFamily: 'system-ui, sans-serif', lineHeight: '1.8'}}>
-      <h1>Welcome to Remix (with Vite and Cloudflare)</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://developers.cloudflare.com/pages/framework-guides/deploy-a-remix-site/"
-            rel="noreferrer"
-          >
-            Cloudflare Pages Docs - Remix guide
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div>
+      <h1>Все доски</h1>
     </div>
   )
 }
+
+export default AppIndex

@@ -5,7 +5,10 @@ export default {
   theme: {
     extend: {
       backgroundColor: {
-        primary: '#1B1B1B',
+        background: {
+          main: '#1B1B1B',
+          alternative: '#262626',
+        },
       },
       textColor: {
         regular: '#FCFCFC',
@@ -13,6 +16,9 @@ export default {
       },
       borderColor: {
         regular: '#262626',
+      },
+      ringColor: {
+        primary: '#E5862F',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
