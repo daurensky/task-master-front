@@ -1,4 +1,6 @@
+import ky from 'ky'
 import {z} from 'zod'
+import {apiInstance} from '~/lib/api.server'
 
 export type LoginParams = {
   email: string
@@ -10,15 +12,12 @@ export type LoginResponse = {
 }
 
 export const login = async (params: LoginParams): Promise<LoginResponse> => {
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
-    method: 'post',
-    body: JSON.stringify(params),
-    headers: {
-      Accept: 'application/json',
-    },
+  ky.create({
+    prefixUrl: '',
   })
-
-  return await res.json()
+  return await apiInstance
+    .post('api/login', {json: params})
+    .json<LoginResponse>()
 }
 
 export const validateLogin = (data: unknown) => {

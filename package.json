@@ -13,11 +13,14 @@
     "typegen": "wrangler types"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.1",
     "@remix-run/cloudflare": "^2.8.1",
     "@remix-run/cloudflare-pages": "^2.8.1",
     "@remix-run/react": "^2.8.1",
     "clsx": "^2.1.0",
+    "framer-motion": "^11.0.14",
     "isbot": "^4.1.0",
+    "ky": "^1.2.2",
     "miniflare": "^3.20231030.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -23,7 +23,7 @@ export function Layout({children}: {children: React.ReactNode}) {
           rel="stylesheet"
         ></link>
       </head>
-      <body>
+      <body className="h-screen bg-background-main font-inter text-regular">
         {children}
         <ScrollRestoration />
         <Scripts />

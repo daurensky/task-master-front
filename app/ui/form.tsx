@@ -4,7 +4,7 @@ import {ComponentProps} from 'react'
 type TextInputProps = ComponentProps<'input'> & {
   variant?: 'primary'
   label?: string
-  error?: string
+  error?: string | string[]
 }
 
 export const TextInput = ({
@@ -16,6 +16,10 @@ export const TextInput = ({
   error,
   ...props
 }: TextInputProps) => {
+  if (typeof error === 'string') {
+    error = [error]
+  }
+
   return (
     <div className="space-y-1">
       {label && (
