@@ -1,6 +1,7 @@
 import {LoaderFunctionArgs} from '@remix-run/cloudflare'
 import {Link, Outlet, redirect} from '@remix-run/react'
 import {getSession} from '~/lib/session.server'
+import {AppLogoWhite} from '~/ui/asset'
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get('Cookie'))
@@ -40,7 +41,10 @@ export const ErrorBoundary = () => {
 
 const AuthLayout = () => {
   return (
-    <div className="flex h-full flex-col">
+    <div className="grid h-full md:grid-cols-2">
+      <div className="bg-tasks hidden bg-cover bg-center p-8 md:block">
+        <AppLogoWhite width={150} />
+      </div>
       <Outlet />
     </div>
   )

@@ -1,5 +1,5 @@
 import {ActionFunctionArgs, json, redirect} from '@remix-run/cloudflare'
-import {Form, useActionData} from '@remix-run/react'
+import {Form, Link, useActionData} from '@remix-run/react'
 import {isHttpError} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
 import {login, validateLogin} from '~/models/auth.server'
@@ -50,11 +50,8 @@ const AuthLogin = () => {
   const errors = useActionData<typeof action>()?.errors || {}
 
   return (
-    <Form
-      method="post"
-      className="m-auto w-full max-w-md space-y-8 rounded-xl border border-regular p-8"
-    >
-      <p className="text-lg font-bold">Войдите в систему</p>
+    <Form method="post" className="m-auto w-full max-w-sm space-y-8 p-8">
+      <p className="text-center text-xl font-medium">Войти в Task Master</p>
       <div className="space-y-4">
         <TextInput
           type="email"
@@ -74,6 +71,17 @@ const AuthLogin = () => {
       <Button type="submit" className="w-full">
         Войти
       </Button>
+      <p className="text-center text-sm text-quiet">
+        Нажимая «Продолжить», вы соглашаетесь с нашими{' '}
+        <Link to="/" className="hover:underline">
+          Условиями обслуживания
+        </Link>{' '}
+        и{' '}
+        <Link to="/" className="hover:underline">
+          Политикой конфиденциальности
+        </Link>
+        .
+      </p>
     </Form>
   )
 }

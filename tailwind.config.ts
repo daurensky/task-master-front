@@ -23,6 +23,9 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      backgroundImage: {
+        tasks: 'url(/assets/img/tasks.jpg)',
+      },
     },
   },
   plugins: [],
