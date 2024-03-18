@@ -1,4 +1,3 @@
-import ky from 'ky'
 import {z} from 'zod'
 import {apiInstance} from '~/lib/api.server'
 
@@ -12,12 +11,7 @@ export type LoginResponse = {
 }
 
 export const login = async (params: LoginParams): Promise<LoginResponse> => {
-  ky.create({
-    prefixUrl: '',
-  })
-  return await apiInstance
-    .post('api/login', {json: params})
-    .json<LoginResponse>()
+  return apiInstance.post('api/login', {json: params}).json<LoginResponse>()
 }
 
 export const validateLogin = (data: unknown) => {
