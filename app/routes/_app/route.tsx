@@ -5,6 +5,7 @@ import {commitSession, getSession} from '~/lib/session.server'
 import {isAuthenticationValid} from '~/models/user.server'
 import {Toast} from '~/ui/overlay'
 import {SideBar} from './side-bar'
+import {getProjectsList} from '~/models/project.server'
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get('Cookie'))
@@ -26,9 +27,16 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     })
   }
 
+  const {searchParams} = new URL(request.url)
+  const projectsPage = +(searchParams.get('projects-page') || 1)
+  const projects = await getProjectsList({page: projectsPage})
+
   const toast = session.get('toast')
   return json(
-    {toast},
+    {
+      projects,
+      toast,
+    },
     {
       headers: {
         'Set-Cookie': await commitSession(session),

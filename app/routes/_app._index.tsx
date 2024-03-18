@@ -13,7 +13,7 @@ export const meta: MetaFunction = () => {
 const AppIndex = () => {
   return (
     <div>
-      <h1>Все доски</h1>
+      <h1>Work in progress</h1>
     </div>
   )
 }
