@@ -30,9 +30,9 @@ export const TextInput = ({
       <input
         type={type || 'text'}
         className={clsx(
-          'rounded-lg px-4 py-2 outline-none',
+          'rounded-lg px-3 py-2 text-sm outline-none',
           variant === 'primary' &&
-            'enabled:focus:ring-primary bg-background-alternative enabled:focus:ring-2',
+            'bg-background-alternative enabled:focus:ring-2 enabled:focus:ring-primary',
           className,
         )}
         {...props}

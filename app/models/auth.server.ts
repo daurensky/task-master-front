@@ -11,7 +11,11 @@ export type LoginResponse = {
 }
 
 export const login = async (params: LoginParams): Promise<LoginResponse> => {
-  return apiInstance.post('api/login', {json: params}).json<LoginResponse>()
+  const response = await apiInstance
+    .post('api/login', {json: params})
+    .json<LoginResponse>()
+
+  return response
 }
 
 export const validateLogin = (data: unknown) => {

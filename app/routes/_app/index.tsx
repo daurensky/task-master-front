@@ -1,18 +1,32 @@
 import {LoaderFunctionArgs, json, redirect} from '@remix-run/cloudflare'
 import {Outlet, useLoaderData} from '@remix-run/react'
+import {authenticate} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
-import {SideBar} from './side-bar'
+import {isAuthenticationValid} from '~/models/user.server'
 import {Toast} from '~/ui/overlay'
+import {SideBar} from './side-bar'
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const session = await getSession(request.headers.get('Cookie'))
 
-  if (!session.get('accessToken')) {
+  const accessToken = session.get('accessToken')
+
+  if (!accessToken) {
     throw redirect('/login')
   }
 
-  const toast = session.get('toast')
+  authenticate(accessToken)
 
+  if (!(await isAuthenticationValid())) {
+    session.unset('accessToken')
+    return redirect('/login', {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    })
+  }
+
+  const toast = session.get('toast')
   return json(
     {toast},
     {

@@ -7,13 +7,14 @@ import {
 import {Form, Link, useActionData} from '@remix-run/react'
 import {isHttpError} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
-import {login, validateLogin} from '~/models/auth.server'
+import {login} from '~/models/auth.server'
+import {registerUser, validateUser} from '~/models/user.server'
 import {Button} from '~/ui/action'
 import {TextInput} from '~/ui/form'
 
 export const meta: MetaFunction = () => {
   return [
-    {title: 'Вход | Task Master'},
+    {title: 'Регистрация | Task Master'},
     {
       name: 'description',
       content: 'Удобный менеджер задач! Создайте свою kanban доску.',
@@ -22,13 +23,19 @@ export const meta: MetaFunction = () => {
 }
 
 export const action = async ({request}: ActionFunctionArgs) => {
-  const validation = validateLogin(Object.fromEntries(await request.formData()))
+  const validation = validateUser(Object.fromEntries(await request.formData()))
 
   if (!validation.success) {
     return json({errors: validation.error.formErrors.fieldErrors})
   }
 
   try {
+    await registerUser({
+      name: validation.data.name,
+      email: validation.data.email,
+      password: validation.data.password,
+    })
+
     const {token} = await login({
       email: validation.data.email,
       password: validation.data.password,
@@ -39,7 +46,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
     session.set('accessToken', token)
     session.flash('toast', {
       type: 'success',
-      message: 'Вы успешно вошли',
+      message: 'Вы успешно зарегистрировались',
     })
 
     return redirect('/', {
@@ -48,34 +55,37 @@ export const action = async ({request}: ActionFunctionArgs) => {
       },
     })
   } catch (e) {
-    if (isHttpError(e) && e.response.status === 401) {
-      return json({
-        errors: {
-          email: [],
-          password: ['Неверный логин или пароль'],
-        },
-      })
+    if (isHttpError(e, 422)) {
+      return json(await e.getErrors())
     }
 
     throw e
   }
 }
 
-const AuthLogin = () => {
+const AuthRegister = () => {
   const errors = useActionData<typeof action>()?.errors || {}
 
   return (
     <div className="relative flex">
       <Link
-        to="/register"
+        to="/login"
         className="absolute right-4 top-4 text-sm hover:underline"
       >
-        Регистрация
+        Вход
       </Link>
 
       <Form method="post" className="m-auto w-full max-w-sm space-y-8 p-8">
-        <p className="text-center text-xl font-medium">Войти в Task Master</p>
+        <p className="text-center text-xl font-medium">
+          Присоединяйтесь к Task Master
+        </p>
         <div className="space-y-4">
+          <TextInput
+            name="name"
+            label="Имя"
+            error={errors.name}
+            className="w-full"
+          />
           <TextInput
             type="email"
             name="email"
@@ -92,7 +102,7 @@ const AuthLogin = () => {
           />
         </div>
         <Button type="submit" className="w-full">
-          Войти
+          Создать аккаунт
         </Button>
         <p className="text-center text-sm text-quiet">
           Продолжая, вы соглашаетесь с нашими{' '}
@@ -110,4 +120,4 @@ const AuthLogin = () => {
   )
 }
 
-export default AuthLogin
+export default AuthRegister

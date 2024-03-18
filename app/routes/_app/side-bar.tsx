@@ -1,12 +1,13 @@
-import {NavLink} from '@remix-run/react'
+import {Link, NavLink} from '@remix-run/react'
 import clsx from 'clsx'
+import {AppLogoWhite} from '~/ui/asset'
 
 export const SideBar = () => {
   return (
-    <nav className="border-regular my-8 border-r px-8">
-      <div className="mb-10">
-        <span className="block h-10 w-10 rounded-full bg-white"></span>
-      </div>
+    <nav className="my-8 space-y-8 border-r border-regular px-8">
+      <Link to="/" className="inline-block">
+        <AppLogoWhite width={100} />
+      </Link>
 
       <ul className="space-y-4">
         {[

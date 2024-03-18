@@ -15,12 +15,11 @@ export const {getSession, commitSession, destroySession} =
   createCookieSessionStorage<SessionData, SessionFlashData>({
     cookie: {
       name: '__session',
-      domain: import.meta.env.VITE_SESSION_DOMAIN,
       httpOnly: true,
-      maxAge: 60,
+      maxAge: 60 * 60 * 24 * 7,
       path: '/',
       sameSite: 'lax',
       secrets: [import.meta.env.VITE_SESSION_SECRET],
-      secure: true,
+      secure: import.meta.env.PROD,
     },
   })
