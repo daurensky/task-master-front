@@ -105,15 +105,15 @@ const AuthRegister = () => {
           Создать аккаунт
         </Button>
         <p className="text-center text-sm text-quiet">
-          Продолжая, вы соглашаетесь с нашими{' '}
+          Создавая аккаунт, вы соглашаетесь с нашими «
           <Link to="/" className="hover:underline">
             Условиями обслуживания
-          </Link>{' '}
-          и{' '}
-          <Link to="/" className="hover:underline">
+          </Link>
+          » и «
+          <Link to="/terms" className="hover:underline">
             Политикой конфиденциальности
           </Link>
-          .
+          ».
         </p>
       </Form>
     </div>

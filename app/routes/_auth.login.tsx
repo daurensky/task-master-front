@@ -94,17 +94,6 @@ const AuthLogin = () => {
         <Button type="submit" className="w-full">
           Войти
         </Button>
-        <p className="text-center text-sm text-quiet">
-          Продолжая, вы соглашаетесь с нашими{' '}
-          <Link to="/" className="hover:underline">
-            Условиями обслуживания
-          </Link>{' '}
-          и{' '}
-          <Link to="/" className="hover:underline">
-            Политикой конфиденциальности
-          </Link>
-          .
-        </p>
       </Form>
     </div>
   )
