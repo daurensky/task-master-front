@@ -10,9 +10,9 @@ export function SideBar() {
   const {projects} = useLoaderData<typeof loader>()
 
   return (
-    <nav className="my-8 space-y-8 border-r border-regular px-6">
+    <aside className="space-y-8 border-r px-6 py-8">
       <Link to="/" className="inline-block">
-        <AppLogo width={100} />
+        <AppLogo width={124} height={32} />
       </Link>
 
       <div>
@@ -65,7 +65,9 @@ export function SideBar() {
               className={({isActive}) =>
                 clsx(
                   'inline-flex -translate-x-1 items-center gap-4 transition-colors',
-                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary',
+                  isActive
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-primary',
                 )
               }
             >
@@ -78,6 +80,6 @@ export function SideBar() {
           </li>
         ))}
       </ul>
-    </nav>
+    </aside>
   )
 }

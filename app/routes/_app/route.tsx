@@ -1,6 +1,17 @@
+import {MagnifyingGlassIcon, UserIcon} from '@heroicons/react/24/outline'
 import {LoaderFunctionArgs, json, redirect} from '@remix-run/cloudflare'
 import {Outlet, useLoaderData} from '@remix-run/react'
 import {useEffect} from 'react'
+import {Button} from '~/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import {Input} from '~/components/ui/input'
 import {Toaster} from '~/components/ui/toaster'
 import {useToast} from '~/components/ui/use-toast'
 import {authenticate} from '~/lib/api.server'
@@ -8,6 +19,7 @@ import {commitSession, getSession} from '~/lib/session.server'
 import {getProjectsList} from '~/models/project.server'
 import {isAuthenticationValid} from '~/models/user.server'
 import {SideBar} from './side-bar'
+import {ModeToggle} from '~/components/mode-toggle'
 
 export async function loader({request}: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'))
@@ -65,8 +77,39 @@ export default function AppLayout() {
     <>
       <div className="grid h-full grid-cols-5">
         <SideBar />
-        <main className="col-span-4 flex p-8">
-          <Outlet />
+        <main className="bg-muted/40 col-span-4 flex flex-col">
+          <header className="bg-background flex gap-4 border-b p-4">
+            <div className="relative ml-auto flex-1 md:grow-0">
+              <MagnifyingGlassIcon className="text-muted-foreground absolute left-2.5 top-2.5 h-4 w-4" />
+              <Input
+                type="search"
+                placeholder="Search..."
+                className="bg-background w-full rounded-lg pl-8 md:w-[200px] lg:w-[336px]"
+              />
+            </div>
+            <ModeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="overflow-hidden rounded-full"
+                >
+                  <UserIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Настройки</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Выйти</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </header>
+          <div className="p-8">
+            <Outlet />
+          </div>
         </main>
       </div>
       <Toaster />

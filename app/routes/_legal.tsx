@@ -8,9 +8,9 @@ export default function LegalLayout() {
         <Link to="/" className="mx-auto">
           <AppLogo width={150} />
         </Link>
-        <hr className="border-muted my-8" />
+        <hr className="my-8" />
         <Outlet />
-        <hr className="border-muted my-8" />
+        <hr className="my-8" />
         <Link to="/" className="mx-auto">
           <AppLogo width={150} />
         </Link>
