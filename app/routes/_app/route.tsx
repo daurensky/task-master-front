@@ -1,13 +1,15 @@
 import {LoaderFunctionArgs, json, redirect} from '@remix-run/cloudflare'
 import {Outlet, useLoaderData} from '@remix-run/react'
+import {useEffect} from 'react'
+import {Toaster} from '~/components/ui/toaster'
+import {useToast} from '~/components/ui/use-toast'
 import {authenticate} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
-import {isAuthenticationValid} from '~/models/user.server'
-import {Toast} from '~/ui/overlay'
-import {SideBar} from './side-bar'
 import {getProjectsList} from '~/models/project.server'
+import {isAuthenticationValid} from '~/models/user.server'
+import {SideBar} from './side-bar'
 
-export const loader = async ({request}: LoaderFunctionArgs) => {
+export async function loader({request}: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get('Cookie'))
 
   const accessToken = session.get('accessToken')
@@ -45,8 +47,19 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   )
 }
 
-const AppLayout = () => {
-  const {toast} = useLoaderData<typeof loader>()
+export default function AppLayout() {
+  const data = useLoaderData<typeof loader>()
+  const {toast} = useToast()
+
+  useEffect(() => {
+    if (data.toast) {
+      toast({
+        title: data.toast.title,
+        description: data.toast.description,
+        variant: data.toast.variant,
+      })
+    }
+  }, [toast, data.toast])
 
   return (
     <>
@@ -56,9 +69,7 @@ const AppLayout = () => {
           <Outlet />
         </main>
       </div>
-      {toast && <Toast type={toast.type} message={toast.message} />}
+      <Toaster />
     </>
   )
 }
-
-export default AppLayout

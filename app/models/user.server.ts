@@ -7,11 +7,11 @@ type RegisterUserParams = {
   name: string
 }
 
-export const registerUser = async (params: RegisterUserParams) => {
+export async function registerUser(params: RegisterUserParams) {
   return apiInstance.post('api/register', {json: params}).text()
 }
 
-export const validateUser = (data: unknown) => {
+export function validateUser(data: unknown) {
   const schema = z.object({
     email: z.string().email().max(255),
     password: z.string().min(8),
@@ -30,11 +30,11 @@ type GetUserResponse = {
   updated_at: null | string
 }
 
-export const getUser = async () => {
+export async function getUser() {
   return apiInstance.get('api/user').json<GetUserResponse>()
 }
 
-export const isAuthenticationValid = async () => {
+export async function isAuthenticationValid() {
   try {
     await getUser()
     return true

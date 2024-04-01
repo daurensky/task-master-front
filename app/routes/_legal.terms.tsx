@@ -1,6 +1,6 @@
 import {Link} from '@remix-run/react'
 
-const LegalTerms = () => {
+export default function LegalTerms() {
   return (
     <div className="space-y-4">
       <h1 className="mb-8 text-center text-2xl">Наше условие обслуживания</h1>
@@ -84,5 +84,3 @@ const LegalTerms = () => {
     </div>
   )
 }
-
-export default LegalTerms

@@ -10,7 +10,7 @@ export type LoginResponse = {
   token: string
 }
 
-export const login = async (params: LoginParams): Promise<LoginResponse> => {
+export async function login(params: LoginParams): Promise<LoginResponse> {
   const response = await apiInstance
     .post('api/login', {json: params})
     .json<LoginResponse>()
@@ -18,7 +18,7 @@ export const login = async (params: LoginParams): Promise<LoginResponse> => {
   return response
 }
 
-export const validateLogin = (data: unknown) => {
+export function validateLogin(data: unknown) {
   const schema = z.object({
     email: z.string().email(),
     password: z.string(),

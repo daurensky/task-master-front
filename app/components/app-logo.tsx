@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import {SVGProps, useEffect, useState} from 'react'
 
-export const AppLogoWhite = ({
+export function AppLogo({
   className,
   width = 248,
   height = 64,
   ...props
-}: SVGProps<SVGSVGElement>) => {
+}: SVGProps<SVGSVGElement>) {
   const [isExplosionShowing, setIsExplosionShowing] = useState(false)
   const [isEmptyShowing, setIsEmptyShowing] = useState(false)
   const [clicks, setClicks] = useState(0)
@@ -65,9 +65,8 @@ export const AppLogoWhite = ({
       width={width}
       height={height}
       viewBox="0 0 248 64"
-      fill="#fff"
       xmlns="http://www.w3.org/2000/svg"
-      className={clsx(className, 'group')}
+      className={clsx('fill-primary group', className)}
       onClick={handleClick}
       {...props}
     >

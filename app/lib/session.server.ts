@@ -6,8 +6,9 @@ type SessionData = {
 
 type SessionFlashData = {
   toast: {
-    type: 'success' | 'warning' | 'error'
-    message: string
+    title?: string
+    description?: string
+    variant?: 'default' | 'destructive'
   }
 }
 

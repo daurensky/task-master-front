@@ -5,12 +5,20 @@ import {
   redirect,
 } from '@remix-run/cloudflare'
 import {Form, Link, useActionData} from '@remix-run/react'
+import {Button} from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import {Input} from '~/components/ui/input'
 import {isHttpError} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
 import {login} from '~/models/auth.server'
 import {registerUser, validateUser} from '~/models/user.server'
-import {Button} from '~/ui/action'
-import {TextInput} from '~/ui/form'
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,7 +30,7 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export const action = async ({request}: ActionFunctionArgs) => {
+export async function action({request}: ActionFunctionArgs) {
   const validation = validateUser(Object.fromEntries(await request.formData()))
 
   if (!validation.success) {
@@ -45,8 +53,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
     session.set('accessToken', token)
     session.flash('toast', {
-      type: 'success',
-      message: 'Вы успешно зарегистрировались',
+      description: 'Вы успешно зарегистрировались',
     })
 
     return redirect('/', {
@@ -63,61 +70,58 @@ export const action = async ({request}: ActionFunctionArgs) => {
   }
 }
 
-const AuthRegister = () => {
+export default function AuthRegister() {
   const errors = useActionData<typeof action>()?.errors || {}
 
   return (
-    <div className="relative flex">
-      <Link
-        to="/login"
-        className="absolute right-4 top-4 text-sm hover:underline"
-      >
-        Вход
-      </Link>
+    <div className="m-auto grid w-full max-w-sm gap-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Регистрация</CardTitle>
+          <CardDescription>Присоединяйтесь к Task Master</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form method="post" id="register" className="grid gap-4">
+            <Input name="name" label="Имя" error={errors.name} />
+            <Input
+              type="email"
+              name="email"
+              label="Электронная почта"
+              error={errors.email}
+            />
+            <Input
+              type="password"
+              name="password"
+              label="Пароль"
+              error={errors.password}
+            />
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button type="submit" form="register">
+            Создать аккаунт
+          </Button>
+        </CardFooter>
+      </Card>
 
-      <Form method="post" className="m-auto w-full max-w-sm space-y-8 p-8">
-        <p className="text-center text-xl font-medium">
-          Присоединяйтесь к Task Master
-        </p>
-        <div className="space-y-4">
-          <TextInput
-            name="name"
-            label="Имя"
-            error={errors.name}
-            className="w-full"
-          />
-          <TextInput
-            type="email"
-            name="email"
-            label="Электронная почта"
-            error={errors.email}
-            className="w-full"
-          />
-          <TextInput
-            type="password"
-            name="password"
-            label="Пароль"
-            error={errors.password}
-            className="w-full"
-          />
-        </div>
-        <Button type="submit" className="w-full">
-          Создать аккаунт
-        </Button>
-        <p className="text-center text-sm text-quiet">
-          Создавая аккаунт, вы соглашаетесь с нашими «
-          <Link to="/" className="hover:underline">
-            Условиями обслуживания
-          </Link>
-          » и «
-          <Link to="/terms" className="hover:underline">
-            Политикой конфиденциальности
-          </Link>
-          ».
-        </p>
-      </Form>
+      <p className="text-muted-foreground text-center text-sm">
+        Создавая аккаунт, вы соглашаетесь с нашими «
+        <Link to="/" className="hover:text-primary hover:underline">
+          Условиями обслуживания
+        </Link>
+        » и «
+        <Link to="/terms" className="hover:text-primary hover:underline">
+          Политикой конфиденциальности
+        </Link>
+        ».
+      </p>
+
+      <p className="text-muted-foreground place-self-center text-sm">
+        Уже есть аккаунт?{' '}
+        <Link to="/login" className="hover:text-primary hover:underline">
+          Войдите
+        </Link>
+      </p>
     </div>
   )
 }
-
-export default AuthRegister

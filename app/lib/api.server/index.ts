@@ -32,7 +32,7 @@ export let apiInstance = ky.create({
   },
 })
 
-export const authenticate = (accessToken: string) => {
+export function authenticate(accessToken: string) {
   apiInstance = apiInstance.extend({
     headers: {
       Authorization: `Bearer ${accessToken}`,

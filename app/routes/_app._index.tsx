@@ -10,12 +10,10 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-const AppIndex = () => {
+export default function AppIndex() {
   return (
     <div>
       <h1>Work in progress</h1>
     </div>
   )
 }
-
-export default AppIndex

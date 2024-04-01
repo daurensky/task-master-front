@@ -5,11 +5,19 @@ import {
   redirect,
 } from '@remix-run/cloudflare'
 import {Form, Link, useActionData} from '@remix-run/react'
+import {Button} from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import {Input} from '~/components/ui/input'
 import {isHttpError} from '~/lib/api.server'
 import {commitSession, getSession} from '~/lib/session.server'
 import {login, validateLogin} from '~/models/auth.server'
-import {Button} from '~/ui/action'
-import {TextInput} from '~/ui/form'
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,7 +29,7 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export const action = async ({request}: ActionFunctionArgs) => {
+export async function action({request}: ActionFunctionArgs) {
   const validation = validateLogin(Object.fromEntries(await request.formData()))
 
   if (!validation.success) {
@@ -38,8 +46,7 @@ export const action = async ({request}: ActionFunctionArgs) => {
 
     session.set('accessToken', token)
     session.flash('toast', {
-      type: 'success',
-      message: 'Вы успешно вошли',
+      description: 'Вы успешно вошли',
     })
 
     return redirect('/', {
@@ -61,42 +68,44 @@ export const action = async ({request}: ActionFunctionArgs) => {
   }
 }
 
-const AuthLogin = () => {
+export default function AuthLogin() {
   const errors = useActionData<typeof action>()?.errors || {}
 
   return (
-    <div className="relative flex">
-      <Link
-        to="/register"
-        className="absolute right-4 top-4 text-sm hover:underline"
-      >
-        Регистрация
-      </Link>
-
-      <Form method="post" className="m-auto w-full max-w-sm space-y-8 p-8">
-        <p className="text-center text-xl font-medium">Войти в Task Master</p>
-        <div className="space-y-4">
-          <TextInput
-            type="email"
-            name="email"
-            label="Электронная почта"
-            error={errors.email}
-            className="w-full"
-          />
-          <TextInput
-            type="password"
-            name="password"
-            label="Пароль"
-            error={errors.password}
-            className="w-full"
-          />
-        </div>
-        <Button type="submit" className="w-full">
-          Войти
-        </Button>
-      </Form>
+    <div className="m-auto grid w-full max-w-sm gap-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Вход</CardTitle>
+          <CardDescription>Войти в Task Master</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form method="post" id="login" className="grid gap-4">
+            <Input
+              type="email"
+              name="email"
+              label="Электронная почта"
+              error={errors.email}
+            />
+            <Input
+              type="password"
+              name="password"
+              label="Пароль"
+              error={errors.password}
+            />
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button type="submit" form="login">
+            Войти
+          </Button>
+        </CardFooter>
+      </Card>
+      <p className="text-muted-foreground place-self-center text-sm">
+        Нет аккаунта?{' '}
+        <Link to="/register" className="hover:text-primary hover:underline">
+          Зарегистрируйтесь
+        </Link>
+      </p>
     </div>
   )
 }
-
-export default AuthLogin

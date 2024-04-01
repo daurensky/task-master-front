@@ -1,30 +1,40 @@
-import {LinksFunction} from '@remix-run/cloudflare'
-import {Links, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react'
+import {LinksFunction, LoaderFunctionArgs} from '@remix-run/cloudflare'
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData,
+} from '@remix-run/react'
+import clsx from 'clsx'
+import {PreventFlashOnWrongTheme, ThemeProvider, useTheme} from 'remix-themes'
+import {themeSessionResolver} from './lib/theme.server'
 import styles from './tailwind.css?url'
 
 export const links: LinksFunction = () => [{rel: 'stylesheet', href: styles}]
 
-export function Layout({children}: {children: React.ReactNode}) {
+export async function loader({request}: LoaderFunctionArgs) {
+  const {getTheme} = await themeSessionResolver(request)
+  return {
+    theme: getTheme(),
+  }
+}
+
+export function App() {
+  const data = useLoaderData<typeof loader>()
+  const [theme] = useTheme()
   return (
-    <html lang="en">
+    <html lang="ru" className={clsx(theme)}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
-        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        ></link>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-          rel="stylesheet"
-        ></link>
       </head>
-      <body className="h-screen bg-background-main font-inter text-regular">
-        {children}
+      <body className="h-screen">
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -32,6 +42,11 @@ export function Layout({children}: {children: React.ReactNode}) {
   )
 }
 
-export default function App() {
-  return <Outlet />
+export default function AppWithProviders() {
+  const data = useLoaderData<typeof loader>()
+  return (
+    <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+      <App />
+    </ThemeProvider>
+  )
 }

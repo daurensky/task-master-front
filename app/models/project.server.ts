@@ -10,7 +10,7 @@ type ProjectResponse = Paginated<{
   color: string
 }>
 
-export const getProjectsList = (params?: ProjectParams) => {
+export function getProjectsList(params?: ProjectParams) {
   return apiInstance
     .get('api/project', {searchParams: params})
     .json<ProjectResponse>()
